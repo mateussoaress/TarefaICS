@@ -1,3 +1,5 @@
+// Bibliotecas
+
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
@@ -7,6 +9,7 @@
 #include "hardware/clocks.h"
 #include "pio_matrix.pio.h"
 
+// Definição dos Pinos
 #define BOTAO_A 5
 #define BOTAO_B 6
 #define LED_VERMELHO 13
@@ -41,7 +44,7 @@ int main() {
     }
 }
 
-// Matriz com os padrões dos números (corrigida para exibição correta)
+// Matriz com os padrões dos números
 const uint32_t numeros[10][25] = {
     { // 0
       1, 1, 1, 1, 1,
@@ -67,7 +70,7 @@ const uint32_t numeros[10][25] = {
       1, 1, 1, 1, 1,
       1, 0, 0, 0, 0,
       1, 1, 1, 1, 1 },
-    { // 4 (espelhado)
+    { // 4
       1, 0, 0, 0, 1,
       1, 0, 0, 0, 1,
       1, 1, 1, 1, 1,
@@ -105,6 +108,7 @@ const uint32_t numeros[10][25] = {
       1, 1, 1, 1, 1 }
 };
 
+// Evita leituras erradas do botão
 void debounce_botao(uint pino) {
     sleep_ms(50);
     while (!gpio_get(pino)) {
@@ -112,6 +116,7 @@ void debounce_botao(uint pino) {
     }
 }
 
+// Implementa a exibição do número na matriz de LEDs
 void mostrar_numero(int numero) {
     float brilho = 0.1; 
     uint32_t cores[10] = {
@@ -132,6 +137,7 @@ void mostrar_numero(int numero) {
     }
 }
 
+// Atualiza o display OLED com a mensagem fornecida
 void atualizar_display(const char *mensagem) {
     ssd1306_fill(&ssd, false);
     ssd1306_draw_string(&ssd, mensagem, 8, 10);
@@ -139,6 +145,7 @@ void atualizar_display(const char *mensagem) {
     sleep_ms(10); 
 }
 
+// Implementa a lógica para interação com os botões
 void verificar_botoes() {
     static bool estado_anterior_A = true;
     static bool estado_anterior_B = true;
@@ -172,6 +179,7 @@ void verificar_botoes() {
     estado_anterior_B = estado_atual_B;
 }
 
+// Implementa a captura de caracteres via USB
 void verificar_entrada_usb() {
     static bool usb_conectado_anteriormente = false;
 
@@ -203,6 +211,7 @@ void verificar_entrada_usb() {
     }
 }
 
+// Inicializa os periféricos do microcontrolador
 void configurar() {
     stdio_init_all();
     
